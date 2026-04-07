@@ -1,29 +1,16 @@
-import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
-import {defineConfig, loadEnv} from 'vite';
+/// <reference types="vite/client" />
 
-export default defineConfig(({mode}) => {
-  const env = loadEnv(mode, '.', '');
-  return {
-    plugins: [react(), tailwindcss()],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-      },
-    },
-    server: {
-      hmr: process.env.DISABLE_HMR !== 'true',
-      proxy: {
-        '/api/edb': {
-          target: 'https://www.edb.gov.hk',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/edb/, '')
-        }
-      }
-    },
-  };
-});
+interface ImportMetaEnv {
+  readonly VITE_FIREBASE_API_KEY: string
+  readonly VITE_FIREBASE_AUTH_DOMAIN: string
+  readonly VITE_FIREBASE_PROJECT_ID: string
+  readonly VITE_FIREBASE_STORAGE_BUCKET: string
+  readonly VITE_FIREBASE_MESSAGING_SENDER_ID: string
+  readonly VITE_FIREBASE_APP_ID: string
+  readonly VITE_FIREBASE_FIRESTORE_DATABASE_ID: string
+  // more env variables...
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
