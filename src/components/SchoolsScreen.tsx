@@ -9,7 +9,7 @@ import { SchoolDetailModal } from './SchoolComponents';
 
 const EDB_API_URL = '/api/edb/attachment/en/student-parents/sch-info/sch-search/sch-location-info/SCH_LOC_EDB.json';
 
-export default function SchoolsScreen({ onShowToast }: { onShowToast?: (msg: string) => void }) {
+export default function SchoolsScreen({ onShowToast, setHideBottomNav }: { onShowToast?: (msg: string) => void, setHideBottomNav?: (hide: boolean) => void }) {
   const { t, i18n } = useTranslation();
   const [schools, setSchools] = useState<SchoolData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,6 +22,20 @@ export default function SchoolsScreen({ onShowToast }: { onShowToast?: (msg: str
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedFinance, setSelectedFinance] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
+
+  useEffect(() => {
+    if (setHideBottomNav) {
+      setHideBottomNav(isFilterOpen);
+    }
+  }, [isFilterOpen, setHideBottomNav]);
+
+  useEffect(() => {
+    return () => {
+      if (setHideBottomNav) {
+        setHideBottomNav(false);
+      }
+    };
+  }, [setHideBottomNav]);
 
   const getLocalizedValue = (s: SchoolData, zhKey: keyof SchoolData, enKey: keyof SchoolData, fallbackZhKey?: keyof SchoolData, fallbackEnKey?: keyof SchoolData) => {
     if (i18n.language === 'zh') {

@@ -27,7 +27,7 @@ import CalendarScreen from './components/CalendarScreen';
 import ArticleScreen from './components/ArticleScreen';
 import { UserProfile } from './types';
 
-const TabsContent = ({ activeTab, profile, showToast, handleNavigate, setProfile, handleLogout, toggleTheme, isDarkMode }: { 
+const TabsContent = ({ activeTab, profile, showToast, handleNavigate, setProfile, handleLogout, toggleTheme, isDarkMode, setHideBottomNav }: { 
   activeTab: string, 
   profile: UserProfile | null, 
   showToast: (msg: string) => void, 
@@ -35,11 +35,12 @@ const TabsContent = ({ activeTab, profile, showToast, handleNavigate, setProfile
   setProfile: (p: UserProfile) => void,
   handleLogout: () => void,
   toggleTheme: () => void,
-  isDarkMode: boolean
+  isDarkMode: boolean,
+  setHideBottomNav: (hide: boolean) => void
 }) => {
   switch (activeTab) {
     case 'home': return <HomeScreen profile={profile} onShowToast={showToast} onNavigate={handleNavigate} />;
-    case 'schools': return <SchoolsScreen onShowToast={showToast} />;
+    case 'schools': return <SchoolsScreen onShowToast={showToast} setHideBottomNav={setHideBottomNav} />;
     case 'favorites': return <SavedScreen />;
     case 'profile': return <ProfileScreen profile={profile} setProfile={setProfile} onLogout={handleLogout} toggleTheme={toggleTheme} isDarkMode={isDarkMode} onShowToast={showToast} />;
     default: return <HomeScreen profile={profile} onShowToast={showToast} onNavigate={handleNavigate} />;
@@ -59,6 +60,7 @@ export default function App() {
   const [authError, setAuthError] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [hideBottomNav, setHideBottomNav] = useState(false);
 
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -153,7 +155,7 @@ export default function App() {
     }
     try {
       await createUserWithEmailAndPassword(auth, email.trim(), password);
-      showToast(t('Registration successful! Logging you in...'));
+      alert('Registration successful! Logging you in...');
     } catch (error: any) {
       setAuthError(error.message);
     }
@@ -252,13 +254,13 @@ export default function App() {
           <button 
             type="button" 
             onClick={handleGoogleLogin} 
-            className="w-full p-4 rounded-[30px] text-[#1A1A1A] font-bold text-lg border-[1.5px] border-border bg-white flex items-center justify-center gap-3 mb-4 active:scale-95 transition-transform"
+            className="w-full p-4 rounded-[30px] text-text font-bold text-lg border-[1.5px] border-border bg-white flex items-center justify-center gap-3 mb-4 active:scale-95 transition-transform"
           >
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google" />
             Sign in with Google
           </button>
 
-          <button type="button" onClick={handleSignUp} className="w-full p-4 rounded-[30px] text-primary font-bold text-lg border-[1.5px] border-primary bg-white dark:bg-card active:scale-95 transition-transform">Create New Account</button>
+          <button type="button" onClick={handleSignUp} className="w-full p-4 rounded-[30px] text-primary font-bold text-lg border-[1.5px] border-primary bg-white active:scale-95 transition-transform">Create New Account</button>
         </form>
         
         <div className="mt-6 text-[13px] text-muted text-center">Secure authentication powered by Firebase</div>
@@ -511,17 +513,20 @@ export default function App() {
               handleLogout={handleLogout}
               toggleTheme={toggleTheme}
               isDarkMode={isDarkMode}
+              setHideBottomNav={setHideBottomNav}
             />
           </motion.div>
         </AnimatePresence>
       </main>
 
-      <nav className="absolute bottom-0 left-0 w-full h-[72px] bg-card border-t border-border flex items-center justify-around pb-safe shadow-[0_-4px_12px_rgba(0,0,0,0.03)] backdrop-blur-md z-50">
-        <NavButton icon={<Home />} label={t('Home')} active={activeTab === 'home'} onClick={() => setActiveTab('home')} />
-        <NavButton icon={<Search />} label={t('Schools')} active={activeTab === 'schools'} onClick={() => setActiveTab('schools')} />
-        <NavButton icon={<Heart />} label={t('Favorites')} active={activeTab === 'favorites'} onClick={() => setActiveTab('favorites')} />
-        <NavButton icon={<User />} label={t('Profile')} active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
-      </nav>
+      {!hideBottomNav && (
+        <nav className="absolute bottom-0 left-0 w-full h-[72px] bg-card border-t border-border flex items-center justify-around pb-safe shadow-[0_-4px_12px_rgba(0,0,0,0.03)] backdrop-blur-md z-50">
+          <NavButton icon={<Home />} label={t('Home')} active={activeTab === 'home'} onClick={() => setActiveTab('home')} />
+          <NavButton icon={<Search />} label={t('Schools')} active={activeTab === 'schools'} onClick={() => setActiveTab('schools')} />
+          <NavButton icon={<Heart />} label={t('Favorites')} active={activeTab === 'favorites'} onClick={() => setActiveTab('favorites')} />
+          <NavButton icon={<User />} label={t('Profile')} active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
+        </nav>
+      )}
     </div>
   );
 
