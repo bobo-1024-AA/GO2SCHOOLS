@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-chip-bg: var(--chip-bg);
+  --color-chip-border: var(--chip-border);
+  --radius-xl: 16px;
+}
+
+@layer base {
+  :root {
+    --primary: #FF8C00;
+    --bg: #FAFAFA;
+    --card: #FFFFFF;
+    --text: #1A1A1A;
+    --muted: #8A9AAB;
+    --muted-foreground: #6B7280;
+    --success: #4CAF50;
+    --info: #2196F3;
+    --danger: #FF3B30;
+    --border: #E5E7EB;
+    --chip-bg: #F3F4F6;
+    --chip-border: #E5E7EB;
+  }
+  
+  .dark {
+    --bg: #1A1A2E;
+    --card: #16213E;
+    --text: #E0E0E0;
+    --muted: #7A8A9B;
+    --muted-foreground: #9CA3AF;
+    --border: #2A2A4A;
+    --chip-bg: #16213E;
+    --chip-border: #2A2A4A;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    background-color: var(--bg);
+  }
+
+  #root {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s;
+    background-color: var(--bg);
+  }
+}
+
+.btn {
+  background: var(--primary);
+  color: #1A1A1A;
+  border: none;
+  padding: 16px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(255, 140, 0, 0.3);
+  transition: transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.calendar-container .react-calendar {
+  width: 100%;
+  border: none;
+  font-family: inherit;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  background: var(--card);
+  color: var(--text);
+}
+
+.calendar-container .react-calendar__tile--active {
+  background: var(--primary) !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+.calendar-container .react-calendar__tile--now {
+  background: rgba(255, 140, 0, 0.1) !important;
+  color: var(--primary) !important;
+  border-radius: 8px;
+}
+
+.calendar-container .react-calendar__navigation button {
+  color: var(--primary);
+  font-weight: bold;
+}
+

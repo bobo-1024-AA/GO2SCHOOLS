@@ -1,0 +1,5 @@
+{
+  "name": "GO2School",
+  "description": "專為 2026 升學設計的全功能應用程式，包含學校搜尋、倒數計時、家長行事曆及社群論壇。",
+  "requestFramePermissions": ["camera", "microphone", "geolocation"]
+}

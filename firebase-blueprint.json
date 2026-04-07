@@ -1,0 +1,73 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile data",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "display_name": { "type": "string" },
+        "avatar_path": { "type": "string" },
+        "role": { "type": "string" }
+      },
+      "required": ["id", "display_name", "role"]
+    },
+    "SavedSchool": {
+      "title": "SavedSchool",
+      "description": "A school saved by a user",
+      "type": "object",
+      "properties": {
+        "user_id": { "type": "string" },
+        "school_id": { "type": "string" }
+      },
+      "required": ["user_id", "school_id"]
+    },
+    "ForumPost": {
+      "title": "ForumPost",
+      "description": "A post in the forum",
+      "type": "object",
+      "properties": {
+        "author_id": { "type": "string" },
+        "author_name": { "type": "string" },
+        "author_avatar": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["author_id", "author_name", "title", "content", "created_at"]
+    },
+    "CalendarEvent": {
+      "title": "CalendarEvent",
+      "description": "A calendar event for a user",
+      "type": "object",
+      "properties": {
+        "user_id": { "type": "string" },
+        "title": { "type": "string" },
+        "school_name": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "notes": { "type": "string" },
+        "type": { "type": "string", "enum": ["interview", "deadline", "mixer", "other"] }
+      },
+      "required": ["user_id", "title", "date", "time", "type"]
+    }
+  },
+  "firestore": {
+    "/profiles/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profiles stored by their UID"
+    },
+    "/saved_schools/{savedId}": {
+      "schema": { "$ref": "#/entities/SavedSchool" },
+      "description": "Schools saved by users"
+    },
+    "/posts/{postId}": {
+      "schema": { "$ref": "#/entities/ForumPost" },
+      "description": "Forum posts"
+    },
+    "/calendar_events/{eventId}": {
+      "schema": { "$ref": "#/entities/CalendarEvent" },
+      "description": "User calendar events"
+    }
+  }
+}
