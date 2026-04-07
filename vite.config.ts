@@ -1,16 +1,38 @@
-/// <reference types="vite/client" />
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { defineConfig, loadEnv } from 'vite';
 
-interface ImportMetaEnv {
-  readonly VITE_FIREBASE_API_KEY: string
-  readonly VITE_FIREBASE_AUTH_DOMAIN: string
-  readonly VITE_FIREBASE_PROJECT_ID: string
-  readonly VITE_FIREBASE_STORAGE_BUCKET: string
-  readonly VITE_FIREBASE_MESSAGING_SENDER_ID: string
-  readonly VITE_FIREBASE_APP_ID: string
-  readonly VITE_FIREBASE_FIRESTORE_DATABASE_ID: string
-  // more env variables...
-}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-interface ImportMeta {
-  readonly env: ImportMetaEnv
-}
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  
+  return {
+    plugins: [react(), tailwindcss()],
+    define: {
+      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
+    server: {
+      hmr: process.env.DISABLE_HMR !== 'true',
+      proxy: {
+        '/api/edb': {
+          target: 'https://www.edb.gov.hk',
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/api\/edb/, '')
+        }
+      }
+    },
+    build: {
+      outDir: 'dist',
+    }
+  };
+});
+
