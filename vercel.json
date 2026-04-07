@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/edb/:path*",
+      "destination": "https://www.edb.gov.hk/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
